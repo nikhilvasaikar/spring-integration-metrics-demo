@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Enable Spring Integration Metrics -->
+    <int:management/>
+
+    <bean class="java.util.Random" id="random"/>
+    <int:publish-subscribe-channel id="numberGeneratorChannel"/>
+    <int:inbound-channel-adapter
+            expression="@random.nextLong()"
+            auto-startup="true" channel="numberGeneratorChannel" id="randomNumberPollingChannelAdapter">
+        <int:poller time-unit="SECONDS" fixed-delay="10"/>
+    </int:inbound-channel-adapter>
+
+    <util:constant id="out" static-field="java.lang.System.out"/>
+    <int:service-activator ref="out" method="println"
+                           input-channel="numberGeneratorChannel"
+                           output-channel="nullChannel"/>
+</beans>
