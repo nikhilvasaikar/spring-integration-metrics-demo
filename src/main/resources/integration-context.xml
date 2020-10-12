@@ -7,9 +7,6 @@
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- Enable Spring Integration Metrics -->
-    <int:management/>
-
     <bean class="java.util.Random" id="random"/>
     <int:publish-subscribe-channel id="numberGeneratorChannel"/>
     <int:inbound-channel-adapter
